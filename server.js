@@ -3,17 +3,25 @@ const bodyParser = require('body-parser')
 const MongoClient = require('mongodb').MongoClient
 const app = express();
 const port = 3000;
-const connectionString = 'mongodb+srv://Tisque:<sqh00part>@cluster0-skw6i.mongodb.net/<dbname>?retryWrites=true&w=majority';
+const connectionString = 'mongodb+srv://Tisque:sqh00part@cluster0-skw6i.mongodb.net/CRUD_APP?retryWrites=true&w=majority';
 app.listen(port, function() {
     console.log(`listening on ${port}`)
 })
-
-MongoClient.connect(connectionString, {
-    useUnifiedTopology: true
-  }, (err, client) => {
-    if (err) return console.error(err)
+MongoClient.connect(connectionString, { useUnifiedTopology: true })
+  .then(client => {
     console.log('Connected to Database')
+    const db = client.db('crud_app')
+    const crudCollection = db.collection('qoutes')
+    
+  app.post('/quotes', (req, res) => {
+    crudCollection.insertOne(req.body)
+      .then(result => {
+        console.log(result)
+      })
+      .catch(error => console.error(error))
   })
+  })
+  .catch(console.error)
 
 // app.get('/', function(req, res) {
 //     res.send('Hello World')
