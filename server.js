@@ -12,7 +12,7 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
     const db = client.db("crud_app");
     const crudCollection = db.collection("qoutes");
     app.use(bodyParser.urlencoded({ extended: true }));
-    app.use(bodyParser.json())
+    app.use(bodyParser.json());
     // app.get('/', (req, res) => {
 
     // })
@@ -29,6 +29,27 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
         .then((results) => {
           res.render("index.ejs", { quotes: results });
           console.log(results);
+        })
+        .catch((error) => console.error(error));
+    });
+    app.put("/quotes", (req, res) => {
+      console.log(req.body);
+      crudCollection
+        .findOneAndUpdate(
+          { name: "Gadibia Oghenetevwodaro" },
+          {
+            $set: {
+              name: req.body.name,
+              quote: req.body.quote,
+            },
+          },
+          {
+            upsert: true,
+          }
+        )
+        .then((result) => {
+          /* ... */
+          console.log(result)
         })
         .catch((error) => console.error(error));
     });
