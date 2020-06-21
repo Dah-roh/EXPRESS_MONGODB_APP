@@ -4,7 +4,7 @@ const MongoClient = require("mongodb").MongoClient;
 const app = express();
 const port = 3000;
 const connectionString =
-  "mongodb+srv://Tisque:sqh00part@cluster0-skw6i.mongodb.net/crud_app?retryWrites=true&w=majority";
+  "mongodb+srv://yourusername:yourpassword@cluster0-skw6i.mongodb.net/crud_app?retryWrites=true&w=majority";
 
 MongoClient.connect(connectionString, { useUnifiedTopology: true })
   .then((client) => {
@@ -13,6 +13,7 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
     const crudCollection = db.collection("qoutes");
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use(bodyParser.json());
+    app.use(express.static("public"));
     // app.get('/', (req, res) => {
 
     // })
@@ -34,25 +35,8 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
     });
     app.put("/quotes", (req, res) => {
       console.log(req.body);
-      crudCollection
-        .findOneAndUpdate(
-          { name: "Gadibia Oghenetevwodaro" },
-          {
-            $set: {
-              name: req.body.name,
-              quote: req.body.quote,
-            },
-          },
-          {
-            upsert: true,
-          }
-        )
-        .then((result) => {
-          /* ... */
-          console.log(result)
-        })
-        .catch((error) => console.error(error));
     });
+
     app.post("/quotes", (req, res) => {
       crudCollection
         .insertOne(req.body)
