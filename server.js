@@ -3,8 +3,6 @@ const bodyParser = require("body-parser");
 const MongoClient = require("mongodb").MongoClient;
 const app = express();
 const port = 3000;
-const connectionString =
-  "mongodb+srv://yourusername:yourpassword@cluster0-skw6i.mongodb.net/crud_app?retryWrites=true&w=majority";
 
 MongoClient.connect(connectionString, { useUnifiedTopology: true })
   .then((client) => {
@@ -13,15 +11,34 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
     const crudCollection = db.collection("qoutes");
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use(bodyParser.json());
-    app.use(express.static("public"));
     // app.get('/', (req, res) => {
 
     // })
     app.listen(port, function () {
       console.log(`listening on ${port}`);
     });
-
+    app.use(express.static('public'));
     app.set("view engine", "ejs");
+
+    app.put("/quotes", (req, res) => {
+      crudCollection.findOneAndUpdate(
+        {name: ''},
+        {
+          $set: {
+            name: req.body.name,
+            quote: req.body.quote
+          }
+        },
+        {
+          upsert: true
+        }
+      )
+      .then(result => {
+        console.log(result);
+        res.json('Success!!')
+      })
+      .catch(error => console.error(error))
+    });
 
     app.get("/", (req, res) => {
       crudCollection
@@ -33,9 +50,6 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
         })
         .catch((error) => console.error(error));
     });
-    app.put("/quotes", (req, res) => {
-      console.log(req.body);
-    });
 
     app.post("/quotes", (req, res) => {
       crudCollection
@@ -46,6 +60,7 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
         })
         .catch((error) => console.error(error));
     });
+
   })
   .catch(console.error);
 
