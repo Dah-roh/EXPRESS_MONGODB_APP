@@ -20,6 +20,19 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
     app.use(express.static('public'));
     app.set("view engine", "ejs");
 
+    app.delete('/quotes', (req, res) => {
+      crudCollection.deleteOne(
+        { name: req.body.name }
+      )
+      .then(result => {
+        if (result.deletedCount === 0) {
+          return res.json('No quote to delete')
+        }
+        res.json(`Deleted One Quote!`)
+      })
+      .catch(error => console.error(error))
+    })
+
     app.put("/quotes", (req, res) => {
       crudCollection.findOneAndUpdate(
         {name: ''},
