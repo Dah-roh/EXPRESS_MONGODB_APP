@@ -18,13 +18,13 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
     app.listen(port, function() {
       console.log(`listening on ${port}`)
   })
-  
+
   app.set('view engine', 'ejs')
 
 app.get('/', (req, res) => {
   crudCollection.find().toArray()
     .then(results => {      
-    res.sendFile(__dirname+'/index.html')
+      res.render('index.ejs', { quotes: results })
       console.log(results)
     })
     .catch(error => console.error(error))
