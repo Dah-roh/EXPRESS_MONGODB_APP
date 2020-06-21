@@ -12,7 +12,7 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
     const db = client.db("crud_app");
     const crudCollection = db.collection("qoutes");
     app.use(bodyParser.urlencoded({ extended: true }));
-
+    app.use(bodyParser.json())
     // app.get('/', (req, res) => {
 
     // })
