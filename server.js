@@ -4,7 +4,7 @@ const MongoClient = require("mongodb").MongoClient;
 const app = express();
 const port = 3000;
 const connectionString =
-  "mongodb+srv://Tisque:sqh00part@cluster0-skw6i.mongodb.net/crud_app?retryWrites=true&w=majority";
+  "mongodb+srv://yourusername:yourpassword@cluster0-skw6i.mongodb.net/crud_app?retryWrites=true&w=majority";
 
 MongoClient.connect(connectionString, { useUnifiedTopology: true })
   .then((client) => {
@@ -12,7 +12,8 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
     const db = client.db("crud_app");
     const crudCollection = db.collection("qoutes");
     app.use(bodyParser.urlencoded({ extended: true }));
-
+    app.use(bodyParser.json());
+    app.use(express.static("public"));
     // app.get('/', (req, res) => {
 
     // })
@@ -32,6 +33,10 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
         })
         .catch((error) => console.error(error));
     });
+    app.put("/quotes", (req, res) => {
+      console.log(req.body);
+    });
+
     app.post("/quotes", (req, res) => {
       crudCollection
         .insertOne(req.body)
