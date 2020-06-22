@@ -2,9 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const MongoClient = require("mongodb").MongoClient;
 const app = express();
-const port = 3000;
-
-MongoClient.connect(connectionString, { useUnifiedTopology: true })
+const port = 3000;MongoClient.connect(connectionString, { useUnifiedTopology: true })
   .then((client) => {
     console.log("Connected to Database");
     const db = client.db("crud_app");
