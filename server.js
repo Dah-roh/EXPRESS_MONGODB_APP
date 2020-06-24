@@ -2,7 +2,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const MongoClient = require("mongodb").MongoClient;
 const app = express();
-const port = 3000;MongoClient.connect(connectionString, { useUnifiedTopology: true })
+const port = 3000;
+MongoClient.connect(connectionString, { useUnifiedTopology: true })
   .then((client) => {
     console.log("Connected to Database");
     const db = client.db("crud_app");
@@ -21,15 +22,16 @@ const port = 3000;MongoClient.connect(connectionString, { useUnifiedTopology: tr
     app.delete('/quotes', (req, res) => {
       crudCollection.deleteOne(
         { name: req.body.name }
-      )
+      
       .then(result => {
         if (result.deletedCount === 0) {
           return res.json('No quote to delete')
         }
         res.json(`Deleted One Quote!`)
       })
-      .catch(error => console.error(error))
-    })
+      .catch(error => console.error(error)))
+    });
+  
 
     app.put("/quotes", (req, res) => {
       crudCollection.findOneAndUpdate(
